@@ -27,10 +27,13 @@ export const RecommendationArea = () => {
       <View style={styles.container}>
          <Text style={styles.title}>Quem seguir</Text>
          <View style={styles.content}>
-         {Array.isArray(users) && users.map((user) => (
-            <RecommendationItem key={user.slug} user={user} />
-         ))}
-         <RecommendationItemSkeleton />
+            {Array.isArray(users) &&
+               users.map((user) => (
+                  <RecommendationItem key={user.slug} user={user} />
+               ))}
+            <RecommendationItemSkeleton />
+            <RecommendationItemSkeleton />
+            <RecommendationItemSkeleton />
          </View>
       </View>
    );

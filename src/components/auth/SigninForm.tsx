@@ -20,11 +20,9 @@ export const SigninForm = () => {
          });
 
          if (response.status === 200) {
-            // Armazenar o token e o slug do usuário
             await sessionStorage.setItem("userSlug", response.data.user.slug);
+            await sessionStorage.setItem("name", response.data.user.name);
             await sessionStorage.setItem("token", response.data.token);
-
-            // Navegar para a página inicial
             router.replace("/home");
          } else {
             Alert.alert("Erro", "Email ou senha incorretos.");

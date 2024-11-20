@@ -27,27 +27,26 @@ export default function EditProfileScreen() {
       avatar: "",
       cover: "",
       bio: "",
-      link: ""
-   }
+      link: "",
+   };
 
    const [user, setUserData] = useState(userData);
    const [imageUri, setImageUri] = useState<string | null>(null);
    const router = useRouter();
 
-   const uploadImage = async (file: File, type: 'avatar' | 'cover') => {
+   const uploadImage = async (file: File, type: "avatar" | "cover") => {
       const formData = new FormData();
-      formData.append('file', file);
-   
+      formData.append("file", file);
+
       try {
          const response = await api.put(`/user/${type}`, formData, {
             headers: {
-               'Content-Type': 'multipart/form-data',
+               "Content-Type": "multipart/form-data",
             },
          });
-   
+
          if (response.status === 200) {
             console.log(`${type} atualizado com sucesso!`);
-            // Atualize o estado do usuário aqui, se necessário.
          } else {
             console.log(`Erro ao atualizar ${type}`);
          }
@@ -55,12 +54,13 @@ export default function EditProfileScreen() {
          console.error(`Failed to upload ${type}`, error);
       }
    };
-   
 
    useEffect(() => {
       const getUserData = async () => {
          try {
-            const response = await api.get(`/user/${sessionStorage.getItem('userSlug')}`);
+            const response = await api.get(
+               `/user/${sessionStorage.getItem("userSlug")}`
+            );
             const data = response.data.user;
             if (data) {
                setUserData(data);
@@ -73,20 +73,23 @@ export default function EditProfileScreen() {
       getUserData();
    }, []);
 
-   const [name, setNameField] = useState('');
-   const [bio, setBio] = useState('');
-   const [link, setLink] = useState('');
+   const [name, setNameField] = useState("");
+   const [bio, setBio] = useState("");
+   const [link, setLink] = useState("");
 
    const handleSave = async () => {
       try {
          const response = await api.put(`/user`, {
             name: name,
             bio: bio,
-            link: link
+            link: link,
          });
          if (response.status === 200) {
             console.log("Cadastro atualizado com sucesso!");
-            router.replace("/home");
+            setLink("");
+            setBio("");
+            setNameField("");
+            router.replace("/profile");
          } else {
             console.error("Erro ao atualizar conta:", response.data.error.name);
             const errors = response.data.error;
@@ -102,10 +105,11 @@ export default function EditProfileScreen() {
       }
    };
    const handlePress = async () => {
-      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const permissionResult =
+         await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (!permissionResult.granted) {
-         console.log('Permissão negada!');
+         console.log("Permissão negada!");
          return;
       }
 
@@ -118,23 +122,26 @@ export default function EditProfileScreen() {
       if (!result.canceled) {
          const file = {
             uri: result.assets[0].uri,
-            name: 'upload.jpg',
-            type: 'image/jpeg',
+            name: "upload.jpg",
+            type: "image/jpeg",
          };
 
          const fileObject = await fetch(result.assets[0].uri)
             .then((res) => res.blob())
-            .then((blob) => new File([blob], 'upload.jpg', { type: 'image/jpeg' }));
+            .then(
+               (blob) => new File([blob], "upload.jpg", { type: "image/jpeg" })
+            );
 
-         await uploadImage(fileObject, 'avatar'); // ou 'cover'
+         await uploadImage(fileObject, "avatar");
       }
    };
 
    const handleCover = async () => {
-      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const permissionResult =
+         await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (!permissionResult.granted) {
-         console.log('Permissão negada!');
+         console.log("Permissão negada!");
          return;
       }
 
@@ -147,15 +154,17 @@ export default function EditProfileScreen() {
       if (!result.canceled) {
          const file = {
             uri: result.assets[0].uri,
-            name: 'upload.jpg',
-            type: 'image/jpeg',
+            name: "upload.jpg",
+            type: "image/jpeg",
          };
 
          const fileObject = await fetch(result.assets[0].uri)
             .then((res) => res.blob())
-            .then((blob) => new File([blob], 'upload.jpg', { type: 'image/jpeg' }));
+            .then(
+               (blob) => new File([blob], "upload.jpg", { type: "image/jpeg" })
+            );
 
-         await uploadImage(fileObject, 'cover'); // ou 'cover'
+         await uploadImage(fileObject, "cover");
       }
    };
 
@@ -174,7 +183,10 @@ export default function EditProfileScreen() {
                   />
                </View>
                <View style={styles.iconSection}>
-                  <TouchableOpacity style={styles.iconButton} onPress={handleCover}>
+                  <TouchableOpacity
+                     style={styles.iconButton}
+                     onPress={handleCover}
+                  >
                      <FontAwesomeIcon icon={faCamera} style={styles.icon} />
                   </TouchableOpacity>
                   <TouchableOpacity style={styles.iconButton}>
@@ -183,7 +195,10 @@ export default function EditProfileScreen() {
                </View>
                <View style={styles.avatarContainer}>
                   <Image source={{ uri: user.avatar }} style={styles.avatar} />
-                  <TouchableOpacity style={styles.iconButtonOverlay} onPress={handlePress}>
+                  <TouchableOpacity
+                     style={styles.iconButtonOverlay}
+                     onPress={handlePress}
+                  >
                      <FontAwesomeIcon icon={faCamera} style={styles.icon} />
                   </TouchableOpacity>
                </View>
@@ -191,23 +206,35 @@ export default function EditProfileScreen() {
             <View style={styles.formSection}>
                <View style={styles.inputGroup}>
                   <Text style={styles.label}>Nome</Text>
-                  <Input placeholder="Digite seu nome" value={user.name} onChangeText={setNameField}/>
+                  <Input
+                     placeholder="Digite seu nome"
+                     value={name}
+                     onChangeText={setNameField}
+                  />
                </View>
                <View style={styles.inputGroup}>
                   <Text style={styles.label}>Bio</Text>
                   <Textarea
                      placeholder="Descreva você"
-                     value={user.bio}
+                     value={bio}
                      rows={4}
                      onChangeText={setBio}
                   />
                </View>
                <View style={styles.inputGroup}>
                   <Text style={styles.label}>Link</Text>
-                  <Input placeholder="Adicione um link" value={user.link} onChangeText={setLink}/>
+                  <Input
+                     placeholder="Adicione um link"
+                     value={link}
+                     onChangeText={setLink}
+                  />
                </View>
                <View style={styles.button}>
-                  <Button label="Salvar alterações" size={1} onPress={handleSave} />
+                  <Button
+                     label="Salvar alterações"
+                     size={1}
+                     onPress={handleSave}
+                  />
                </View>
             </View>
          </ScrollView>
