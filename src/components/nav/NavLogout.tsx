@@ -1,14 +1,25 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, Alert } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "expo-router";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const NavLogout = () => {
    const navigation = useRouter();
 
-   const handlePress = () => {
-      navigation.replace("/(auth)/signin");
+   const handlePress = async () => {
+      try {
+         // Remover o token e outros dados do usuário
+         await sessionStorage.removeItem("token");
+         await sessionStorage.removeItem("userSlug");
+
+         // Navegar para a tela de login
+         navigation.replace("/(auth)/signin");
+      } catch (error) {
+         console.error("Erro ao fazer logout:", error);
+         Alert.alert("Erro", "Não foi possível fazer logout.");
+      }
    };
 
    return (

@@ -25,6 +25,7 @@ export const SignupForm = () => {
             console.log("2º CHEGUEI AQUI");
             // Armazenar o token e o slug do usuário
             await sessionStorage.setItem("userSlug", response.data.user.slug);
+            await sessionStorage.setItem("name", response.data.user.name);
             await sessionStorage.setItem("token", response.data.token);
 
             // Navegar para a página inicial
