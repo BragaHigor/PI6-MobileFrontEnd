@@ -5,9 +5,10 @@ type ButtonProps = {
    label: string;
    onPress?: () => void;
    size: 1 | 2 | 3;
+   disabled?: boolean;
 };
 
-export const Button = ({ label, onPress, size }: ButtonProps) => {
+export const Button = ({ label, onPress, size, disabled }: ButtonProps) => {
    let buttonStyle = styles.buttonMedium;
    let textStyle = styles.textMedium;
 
@@ -22,7 +23,12 @@ export const Button = ({ label, onPress, size }: ButtonProps) => {
    return (
       <TouchableOpacity
          onPress={onPress}
-         style={[styles.buttonBase, buttonStyle]}
+         style={[
+            styles.buttonBase,
+            buttonStyle,
+            disabled && styles.buttonDisabled,
+         ]}
+         disabled={disabled}
       >
          <Text style={[styles.textBase, textStyle]}>{label}</Text>
       </TouchableOpacity>
@@ -57,5 +63,8 @@ const styles = StyleSheet.create({
    },
    textSmall: {
       fontSize: 12,
+   },
+   buttonDisabled: {
+      opacity: 0.5,
    },
 });

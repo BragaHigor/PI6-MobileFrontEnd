@@ -24,15 +24,17 @@ export const PostPost = () => {
       avatar: "",
       cover: "",
       bio: "",
-      link: ""
-   }
+      link: "",
+   };
    const router = useRouter();
    const [user, setUserData] = useState(userData);
 
    useEffect(() => {
       const getUserData = async () => {
          try {
-            const response = await api.get(`/user/${sessionStorage.getItem('userSlug')}`);
+            const response = await api.get(
+               `/user/${sessionStorage.getItem("userSlug")}`
+            );
             const data = response.data.user;
             if (data) {
                setUserData(data);
@@ -61,19 +63,20 @@ export const PostPost = () => {
          setImageUri(result.assets[0].uri);
       }
    };
-   
-   const [postBody, setPostBody] = useState('');
+
+   const [postBody, setPostBody] = useState("");
    const handlePostClick = async () => {
       try {
-          const response = await api.post(`/post`, {
-            body: postBody
-          });
+         const response = await api.post(`/post`, {
+            body: postBody,
+         });
          if (response.status === 200) {
             console.log("Post Criado com sucesso");
+            setPostBody("");
             router.replace("/home");
          } else {
             console.error("Erro ao criar post", response.data.error.name);
-            let errorMessage = "Erro ao criar post"
+            let errorMessage = "Erro ao criar post";
             console.log(errorMessage);
          }
       } catch (error) {
@@ -83,6 +86,8 @@ export const PostPost = () => {
    };
    const [postText, setPostText] = useState("");
    const [imageUri, setImageUri] = useState<string | null>(null);
+
+   const isFormValid = postBody.trim() !== "";
 
    return (
       <KeyboardAvoidingView
@@ -111,7 +116,12 @@ export const PostPost = () => {
                   />
                </TouchableOpacity>
                <View style={styles.buttonContainer}>
-                  <Button label="Postar" size={2} onPress={handlePostClick} />
+                  <Button
+                     label="Postar"
+                     size={2}
+                     onPress={handlePostClick}
+                     disabled={!isFormValid}
+                  />
                </View>
             </View>
          </View>

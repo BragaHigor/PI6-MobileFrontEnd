@@ -23,6 +23,7 @@ import { User } from "@/src/types/user";
 export default function ProfilePageScreen() {
    const router = useRouter();
    const [user, setUser] = useState<User | null>(null);
+   const [updateFlag, setUpdateFlag] = useState(false);
    const [counts, setCounts] = useState<{
       postCount?: number;
       followingCount?: number;
@@ -51,7 +52,9 @@ export default function ProfilePageScreen() {
          }
       }
       fetchUser();
-   }, []);
+   }, [updateFlag]);
+
+   console.log("USER", user);
 
    if (user === null) {
       return (
@@ -86,7 +89,7 @@ export default function ProfilePageScreen() {
                      }}
                      style={styles.avatar}
                   />
-                  <View style={styles.buttonContainer}>
+                  {/* <View style={styles.buttonContainer}>
                      {isMe ? (
                         <TouchableOpacity
                            onPress={() => router.push(`/${user.slug}/edit`)}
@@ -94,7 +97,7 @@ export default function ProfilePageScreen() {
                      ) : (
                         <Button label="Seguir" size={2} />
                      )}
-                  </View>
+                  </View> */}
                </View>
                <View style={styles.profileInfo}>
                   <Text style={styles.name}>{user.name}</Text>

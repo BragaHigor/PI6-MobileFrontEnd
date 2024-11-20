@@ -13,6 +13,7 @@ export const NavLogout = () => {
          // Remover o token e outros dados do usuário
          await sessionStorage.removeItem("token");
          await sessionStorage.removeItem("userSlug");
+         await sessionStorage.removeItem("name");
 
          // Navegar para a tela de login
          navigation.replace("/(auth)/signin");
