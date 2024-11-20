@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, ScrollView, Text } from "react-native";
 import { HomeFeed } from "@/src/components/home/HomeFeed";
-import { TweetPost } from "@/src/components/tweet/TweetPost";
+import { PostPost } from "@/src/components/post/PostPost";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GeneralHeader } from "@/src/components/ui/GeneralHeader";
 
@@ -12,7 +12,7 @@ export default function HomeScreen() {
             <GeneralHeader>
                <Text style={styles.headerText}>Página inicial</Text>
             </GeneralHeader>
-            <TweetPost />
+            <PostPost />
             <HomeFeed />
          </ScrollView>
       </SafeAreaView>

@@ -1,9 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { user } from "@/src/data/user";
 import { Link } from "expo-router";
-
+import { User } from "@/src/types/user";
+import api from "@/src/data/axiosConfig";
+const userData: User = {
+   slug: "",
+   name: "",
+   avatar: "",
+   cover: "",
+   bio: "",
+   link: ""
+}
 export const NavMyProfile = () => {
+   const [user, setUserData] = useState(userData);
+
+   useEffect(() => {
+      const getUserData = async () => {
+         try {
+            const response = await api.get(`/user/${sessionStorage.getItem('userSlug')}`);
+            const data = response.data.user;
+            console.log('user', data);
+            if (data) {
+               setUserData(data);
+            }
+         } catch (error) {
+            console.error("Failed to fetch user data", error);
+         }
+      };
+
+      getUserData();
+   }, []);
+
    return (
       <View style={styles.container}>
          <Link href={`/${user.slug}` as never} style={styles.avatarContainer}>

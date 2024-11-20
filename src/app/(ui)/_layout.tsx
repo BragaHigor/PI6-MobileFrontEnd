@@ -135,7 +135,7 @@ export default function UiLayout() {
             }}
          />
          <Tabs.Screen
-            name="tweet/[id]/index"
+            name="post/[id]/index"
             options={{
                headerShown: false,
                tabBarButton: () => null,

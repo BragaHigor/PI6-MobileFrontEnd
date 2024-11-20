@@ -9,9 +9,9 @@ declare global {
          "/home/index": undefined;
          "/profile/index": undefined;
          "/search/index": undefined;
-         "/tweet/[id]/index": { id: number };
+         "/post/[id]/index": { id: number };
          "/[slug]/index": { slug: string };
-         "/[slug]/edit/index": { slug: string };
+         "/[slug]/edit": { slug: string };
       }
    }
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
    View,
    Text,
@@ -11,16 +11,42 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { GeneralHeader } from "@/src/components/ui/GeneralHeader";
-import { user } from "@/src/data/user";
 import { Button } from "@/src/components/ui/Button";
 import { ProfileFeed } from "@/src/components/profile/ProfileFeed";
 import { useRouter } from "expo-router";
 import { ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import api from "@/src/data/axiosConfig";
+import { User } from "@/src/types/user";
 
 export default function ProfilePageScreen() {
    const router = useRouter();
+   const userData: User = {
+      slug: "",
+      name: "",
+      avatar: "",
+      cover: "",
+      bio: "",
+      link: ""
+   }
    const isMe = true;
+   const [user, setUser] = useState(userData);
+   const [counts, setCounts] = useState(userData);
+
+   useEffect(() => {
+      async function fetchUser() {
+         const response = await api.get(`/user/${sessionStorage.getItem('userSlug')}`);
+         const data = await response.data.user;
+         setUser(data);
+         const dataCounts = await response.data;
+         setCounts(dataCounts)
+      }
+      fetchUser();
+   }, []);
+
+   if (!user) {
+      return <div>Loading...</div>;
+   }
 
    return (
       <SafeAreaView style={styles.containerSafeArea}>
@@ -29,7 +55,7 @@ export default function ProfilePageScreen() {
                <View>
                   <Text style={styles.headerName}>{user.name}</Text>
                   <Text style={styles.headerPostCount}>
-                     {user.postCount} posts
+                     {counts.postCount} posts
                   </Text>
                </View>
             </GeneralHeader>
@@ -70,10 +96,10 @@ export default function ProfilePageScreen() {
                   )}
                   <View style={styles.followInfo}>
                      <Text style={styles.followText}>
-                        <Text style={styles.followCount}>99</Text> Seguindo
+                        <Text style={styles.followCount}>{counts.followingCount}</Text> Seguindo
                      </Text>
                      <Text style={styles.followText}>
-                        <Text style={styles.followCount}>99</Text> Seguidores
+                        <Text style={styles.followCount}>{counts.followersCount}</Text> Seguidores
                      </Text>
                   </View>
                </View>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
    View,
    TextInput,
@@ -12,12 +12,38 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../ui/Button";
 import * as ImagePicker from "expo-image-picker";
-import { user } from "@/src/data/user";
+import { User } from "@/src/types/user";
+import { useRouter } from "expo-router";
+import api from "@/src/data/axiosConfig";
+// import { user } from "@/src/data/user";
 
-export const TweetPost = () => {
-   const [tweetText, setTweetText] = useState("");
-   const [imageUri, setImageUri] = useState<string | null>(null);
+export const PostPost = () => {
+   const userData: User = {
+      slug: "",
+      name: "",
+      avatar: "",
+      cover: "",
+      bio: "",
+      link: ""
+   }
+   const router = useRouter();
+   const [user, setUserData] = useState(userData);
 
+   useEffect(() => {
+      const getUserData = async () => {
+         try {
+            const response = await api.get(`/user/${sessionStorage.getItem('userSlug')}`);
+            const data = response.data.user;
+            if (data) {
+               setUserData(data);
+            }
+         } catch (error) {
+            console.error("Failed to fetch user data", error);
+         }
+      };
+
+      getUserData();
+   }, []);
    const handleImageUpload = async () => {
       const { status } =
          await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -35,12 +61,28 @@ export const TweetPost = () => {
          setImageUri(result.assets[0].uri);
       }
    };
-
-   const handlePostClick = () => {
-      console.log("Tweet posted:", tweetText);
-      setTweetText("");
-      setImageUri(null);
+   
+   const [postBody, setPostBody] = useState('');
+   const handlePostClick = async () => {
+      try {
+          const response = await api.post(`/post`, {
+            body: postBody
+          });
+         if (response.status === 200) {
+            console.log("Post Criado com sucesso");
+            router.replace("/home");
+         } else {
+            console.error("Erro ao criar post", response.data.error.name);
+            let errorMessage = "Erro ao criar post"
+            console.log(errorMessage);
+         }
+      } catch (error) {
+         console.error("Erro ao criar post", error);
+         console.log("Erro ao criar post");
+      }
    };
+   const [postText, setPostText] = useState("");
+   const [imageUri, setImageUri] = useState<string | null>(null);
 
    return (
       <KeyboardAvoidingView
@@ -54,8 +96,8 @@ export const TweetPost = () => {
                placeholder="O que você está pensando?"
                placeholderTextColor="#e1e1e1"
                multiline
-               value={tweetText}
-               onChangeText={setTweetText}
+               value={postBody}
+               onChangeText={setPostBody}
             />
             {imageUri && (
                <Image source={{ uri: imageUri }} style={styles.uploadedImage} />

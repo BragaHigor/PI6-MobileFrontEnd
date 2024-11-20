@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { RecommendationItem } from "./RecommendationItem";
 import { RecommendationItemSkeleton } from "./skeleton/RecommendationItemSkeleton";
-import { user } from "@/src/data/user";
+import api from "@/src/data/axiosConfig";
+import { User } from "@/src/types/user";
 
 export const RecommendationArea = () => {
+   const [users, setUsers] = useState<User[]>([]);
+   const [loading, setLoading] = useState(true);
+
+   useEffect(() => {
+      const fetchUsers = async () => {
+         try {
+            const response = await api.get("/suggestions");
+            setUsers(response.data);
+         } catch (error) {
+            console.error("Error fetching suggestions:", error);
+         } finally {
+            setLoading(false);
+         }
+      };
+
+      fetchUsers();
+   }, []);
    return (
       <View style={styles.container}>
          <Text style={styles.title}>Quem seguir</Text>
          <View style={styles.content}>
-            <RecommendationItem user={user} />
-            <RecommendationItem user={user} />
-            <RecommendationItem user={user} />
-            <RecommendationItemSkeleton />
-            <RecommendationItemSkeleton />
+         {Array.isArray(users) && users.map((user) => (
+            <RecommendationItem key={user.slug} user={user} />
+         ))}
+         <RecommendationItemSkeleton />
          </View>
       </View>
    );

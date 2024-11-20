@@ -5,16 +5,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faHeartPulse } from "@fortawesome/free-solid-svg-icons/faHeartPulse";
 import { faRetweet } from "@fortawesome/free-solid-svg-icons/faRetweet";
 import { faComment, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { Tweet } from "@/src/types/tweet";
+import { Post } from "@/src/types/post";
 import { formatRelativeTime } from "@/src/utils/formatRelativeTime";
 
-type TweetItemProps = {
-   tweet: Tweet;
+type PostItemProps = {
+   post: Post;
    hideComments?: boolean;
 };
 
-export const TweetItem = ({ tweet, hideComments }: TweetItemProps) => {
-   const [liked, setLiked] = useState(tweet.liked);
+export const PostItem = ({ post, hideComments }: PostItemProps) => {
+   const [liked, setLiked] = useState(post.liked);
    const router = useRouter();
 
    const handleLikeButton = () => {
@@ -22,45 +22,45 @@ export const TweetItem = ({ tweet, hideComments }: TweetItemProps) => {
    };
 
    const handleUserPress = () => {
-      router.push(`/${tweet.user.slug}`);
+      router.push(`/${post.user.slug}`);
    };
 
-   const handleTweetPress = () => {
-      router.push(`/tweet/${tweet.id}`);
+   const handlePostPress = () => {
+      router.push(`/post/${post.id}`);
    };
 
    return (
       <View style={styles.container}>
          <TouchableOpacity onPress={handleUserPress}>
-            <Image style={styles.avatar} source={{ uri: tweet.user.avatar }} />
+            <Image style={styles.avatar} source={{ uri: post.user.avatar }} />
          </TouchableOpacity>
          <View style={styles.content}>
             <View style={styles.header}>
                <TouchableOpacity onPress={handleUserPress}>
-                  <Text style={styles.name}>{tweet.user.name}</Text>
+                  <Text style={styles.name}>{post.user.name}</Text>
                </TouchableOpacity>
                <Text style={styles.meta}>
-                  @{tweet.user.slug} · {formatRelativeTime(tweet.dataPost)}
+                  @{post.user.slug}
                </Text>
             </View>
-            <Text style={styles.body}>{tweet.body}</Text>
-            {tweet.image && (
+            <Text style={styles.body}>{post.body}</Text>
+            {post.image && (
                <View style={styles.imageContainer}>
-                  <Image style={styles.image} source={{ uri: tweet.image }} />
+                  <Image style={styles.image} source={{ uri: post.image }} />
                </View>
             )}
             <View style={styles.actions}>
                {!hideComments && (
                   <TouchableOpacity
                      style={styles.actionItem}
-                     onPress={handleTweetPress}
+                     onPress={handlePostPress}
                   >
                      <FontAwesomeIcon
                         icon={faComment}
                         size={24}
                         style={styles.icon}
                      />
-                     <Text style={styles.actionText}>{tweet.commentCount}</Text>
+                     <Text style={styles.actionText}>{post.commentCount}</Text>
                   </TouchableOpacity>
                )}
                <TouchableOpacity style={styles.actionItem}>
@@ -69,7 +69,7 @@ export const TweetItem = ({ tweet, hideComments }: TweetItemProps) => {
                      size={24}
                      style={styles.icon}
                   />
-                  <Text style={styles.actionText}>{tweet.retweetCount}</Text>
+                  <Text style={styles.actionText}>{post.retweetCount}</Text>
                </TouchableOpacity>
                <TouchableOpacity
                   style={styles.actionItem}
@@ -81,7 +81,7 @@ export const TweetItem = ({ tweet, hideComments }: TweetItemProps) => {
                      color={liked ? "#e0245e" : "#657786"}
                      style={styles.icon}
                   />
-                  <Text style={styles.actionText}>{tweet.likeCount}</Text>
+                  <Text style={styles.actionText}>{post.likeCount}</Text>
                </TouchableOpacity>
             </View>
          </View>

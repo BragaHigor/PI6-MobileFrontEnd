@@ -1,24 +1,22 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { TweetItem } from "@/src/components/tweet/TweetItem";
-import { TweetPost } from "@/src/components/tweet/TweetPost";
+import { PostItem } from "@/src/components/post/PostItem";
+import { PostPost } from "@/src/components/post/PostPost";
 import { GeneralHeader } from "@/src/components/ui/GeneralHeader";
-import { tweet } from "@/src/data/tweet";
+import { post } from "@/src/data/post";
 
-export default function TweetScreen() {
+export default function PostScreen() {
    return (
       <ScrollView contentContainerStyle={styles.container}>
          <GeneralHeader>
-            <Text style={styles.headerText}>Comentar Tweet</Text>
+            <Text style={styles.headerText}>Comentar Post</Text>
          </GeneralHeader>
-         <View style={styles.tweetContainer}>
-            <TweetItem tweet={tweet} />
-            <View style={styles.tweetPostContainer}>
-               <TweetPost />
+         <View style={styles.postContainer}>
+            <PostItem post={post} />
+            <View style={styles.postPostContainer}>
+               <PostPost />
             </View>
-            <TweetItem tweet={tweet} hideComments />
-            <TweetItem tweet={tweet} hideComments />
-            <TweetItem tweet={tweet} hideComments />
+            <PostItem post={post} hideComments />
          </View>
       </ScrollView>
    );
@@ -32,11 +30,11 @@ const styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: "500",
    },
-   tweetContainer: {
+   postContainer: {
       borderTopWidth: 2,
       borderColor: "#1f2937",
    },
-   tweetPostContainer: {
+   postPostContainer: {
       borderTopWidth: 8,
       borderBottomWidth: 8,
       borderColor: "#1f2937",

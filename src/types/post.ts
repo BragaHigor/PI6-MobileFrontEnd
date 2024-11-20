@@ -1,6 +1,6 @@
 import { User } from "./user";
 
-export type Tweet = {
+export type Post = {
    id: number;
    user: User;
    body: string;

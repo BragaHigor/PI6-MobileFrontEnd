@@ -3,8 +3,8 @@ import { View, StyleSheet } from "react-native";
 import { usePathname, useRouter } from "expo-router";
 import { GeneralHeader } from "@/src/components/ui/GeneralHeader";
 import { SearchInput } from "@/src/components/nav/SearchInput";
-import { TweetItem } from "@/src/components/tweet/TweetItem";
-import { tweet } from "@/src/data/tweet";
+import { PostItem } from "@/src/components/post/PostItem";
+import { post } from "@/src/data/post";
 
 export default function SearchComponent() {
    const router = useRouter();
@@ -32,9 +32,9 @@ export default function SearchComponent() {
             <SearchInput defaultValue={searchQuery} />
          </GeneralHeader>
          <View style={styles.resultsContainer}>
-            <TweetItem tweet={tweet} />
-            <TweetItem tweet={tweet} />
-            <TweetItem tweet={tweet} />
+            <PostItem post={post} />
+            <PostItem post={post} />
+            <PostItem post={post} />
          </View>
       </View>
    );

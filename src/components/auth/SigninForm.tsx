@@ -2,14 +2,37 @@ import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
+import axios from "axios";
+import { Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import api from "@/src/data/axiosConfig";
 
 export const SigninForm = () => {
-   const navigation = useRouter();
+   const router = useRouter();
    const [emailField, setEmailField] = useState("");
    const [passwordField, setPasswordField] = useState("");
 
-   const handleEnterButton = () => {
-      navigation.replace("/home");
+   const handleEnterButton = async () => {
+      try {
+         const response = await api.post("/signin", {
+            email: emailField,
+            password: passwordField,
+         });
+
+         if (response.status === 200) {
+            // Armazenar o token e o slug do usuário
+            await sessionStorage.setItem("userSlug", response.data.user.slug);
+            await sessionStorage.setItem("token", response.data.token);
+
+            // Navegar para a página inicial
+            router.replace("/home");
+         } else {
+            Alert.alert("Erro", "Email ou senha incorretos.");
+         }
+      } catch (error) {
+         console.error("Erro ao fazer login:", error);
+         Alert.alert("Erro", "Não foi possível fazer login. Tente novamente.");
+      }
    };
 
    return (
