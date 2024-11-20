@@ -66,7 +66,7 @@ export default function UiLayout() {
             }}
          />
          <Tabs.Screen
-            name="[slug]/index"
+            name="profile/index"
             options={{
                headerShown: false,
                title: "Meu Perfil",
@@ -89,7 +89,7 @@ export default function UiLayout() {
             }}
          />
          <Tabs.Screen
-            name="[slug]/edit/index"
+            name="profile/edit/index"
             options={{
                headerShown: false,
                title: "Editar Perfil",

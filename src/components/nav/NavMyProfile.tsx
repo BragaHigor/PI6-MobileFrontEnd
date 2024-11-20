@@ -9,17 +9,18 @@ const userData: User = {
    avatar: "",
    cover: "",
    bio: "",
-   link: ""
-}
+   link: "",
+};
 export const NavMyProfile = () => {
    const [user, setUserData] = useState(userData);
 
    useEffect(() => {
       const getUserData = async () => {
          try {
-            const response = await api.get(`/user/${sessionStorage.getItem('userSlug')}`);
+            const response = await api.get(
+               `/user/${sessionStorage.getItem("userSlug")}`
+            );
             const data = response.data.user;
-            console.log('user', data);
             if (data) {
                setUserData(data);
             }

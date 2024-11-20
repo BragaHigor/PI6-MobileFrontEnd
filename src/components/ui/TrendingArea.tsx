@@ -19,7 +19,7 @@ export const TrendingArea = () => {
             setLoading(false);
          }
       };
-   
+
       fetchPosts();
    }, []);
    return (
@@ -27,8 +27,12 @@ export const TrendingArea = () => {
          <Text style={styles.title}>O que está acontecendo?</Text>
          <View style={styles.content}>
             <View style={styles.itemSpacing}>
-               {trends.map((trend) => (
-                  <TrendingItem label={trend.hashtag} count={trend.counter} />
+               {trends.map((trend, index) => (
+                  <TrendingItem
+                     key={index}
+                     label={trend.hashtag}
+                     count={trend.counter}
+                  />
                ))}
             </View>
             <View style={styles.itemSpacing}>

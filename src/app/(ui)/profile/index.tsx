@@ -7,6 +7,7 @@ import {
    TouchableOpacity,
    Linking,
    ScrollView,
+   ActivityIndicator,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faLink } from "@fortawesome/free-solid-svg-icons";
@@ -27,25 +28,31 @@ export default function ProfilePageScreen() {
       avatar: "",
       cover: "",
       bio: "",
-      link: ""
-   }
+      link: "",
+   };
    const isMe = true;
    const [user, setUser] = useState(userData);
    const [counts, setCounts] = useState(userData);
 
    useEffect(() => {
       async function fetchUser() {
-         const response = await api.get(`/user/${sessionStorage.getItem('userSlug')}`);
+         const response = await api.get(
+            `/user/${sessionStorage.getItem("userSlug")}`
+         );
          const data = await response.data.user;
          setUser(data);
          const dataCounts = await response.data;
-         setCounts(dataCounts)
+         setCounts(dataCounts);
       }
       fetchUser();
    }, []);
 
-   if (!user) {
-      return <div>Loading...</div>;
+   if (user === null) {
+      return (
+         <View style={styles.loading}>
+            <ActivityIndicator size="large" color="#0000ff" />
+         </View>
+      );
    }
 
    return (
@@ -96,10 +103,16 @@ export default function ProfilePageScreen() {
                   )}
                   <View style={styles.followInfo}>
                      <Text style={styles.followText}>
-                        <Text style={styles.followCount}>{counts.followingCount}</Text> Seguindo
+                        <Text style={styles.followCount}>
+                           {counts.followingCount}
+                        </Text>{" "}
+                        Seguindo
                      </Text>
                      <Text style={styles.followText}>
-                        <Text style={styles.followCount}>{counts.followersCount}</Text> Seguidores
+                        <Text style={styles.followCount}>
+                           {counts.followersCount}
+                        </Text>{" "}
+                        Seguidores
                      </Text>
                   </View>
                </View>
@@ -111,6 +124,11 @@ export default function ProfilePageScreen() {
 }
 
 const styles = StyleSheet.create({
+   loading: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+   },
    containerSafeArea: {
       flex: 1,
    },

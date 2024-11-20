@@ -13,7 +13,6 @@ export const SignupForm = () => {
    const [passwordField, setPasswordField] = useState("");
 
    const handleEnterButton = async () => {
-      console.log("1º CHEGUEI AQUI");
       try {
          const response = await api.post("/signup", {
             name: nameField,
@@ -22,13 +21,9 @@ export const SignupForm = () => {
          });
 
          if (response.status === 201) {
-            console.log("2º CHEGUEI AQUI");
-            // Armazenar o token e o slug do usuário
             await sessionStorage.setItem("userSlug", response.data.user.slug);
+            await sessionStorage.setItem("name", response.data.user.name);
             await sessionStorage.setItem("token", response.data.token);
-
-            // Navegar para a página inicial
-            console.log("3° CHEGUEI AQUI");
             router.replace("/home");
          } else {
             Alert.alert("Erro", "Não foi possível criar a conta.");
